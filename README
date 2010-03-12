@@ -1,0 +1,40 @@
+sfSimpleGoogleSitemap plugin
+===================
+
+Плагин для генерации google sitemap
+
+Основная документация http://www.symfony-project.org/plugins/sfSimpleGoogleSitemapPlugin/1_0_0?tab=plugin_readme
+
+Configuration
+-------------
+
+Отличия от оригинального плагина:
+
+* поддержка Doctrine
+* в url можно указывать имя маршрута, а не полную ссылку
+
+app.yml:
+
+    all:
+      sfSimpleGoogleSitemap:
+        orm:                  auto                   # possible values: auto, Propel, DbFinder, Doctrine. 'auto' is auto detection. Note: case sensitive!
+        urls:                                        # define multiple static urls here
+          homepage:                                  # just a name
+            url:              homepage               # route to page
+            freq:             daily                  # must be either: always, hourly, daily, weekly, monthly, yearly, never
+            priority:         1.0                    # 1.0 is top priority (100%) compared to 0.2 which is less priority (20%)
+          about:
+            url:              static_about
+            freq:             weekly
+            priority:         0.5
+        models:                                      # define multiple models to generate sitemap from
+          # sample for Doctrine:
+          flats:                                    # just a name
+            model:            Flat                  # model class name
+            query_method:     querySitemap          # method for query
+            module:           catalog_flat          # name of module for the url to make up the url
+            action:           show                  # name of action for the url to make up the url
+            params:           { id: getId }         # parameters for the url
+            date:             getUpdatedAt          # method to get date last updated for the url
+            freq:             weekly                # must be either: always, hourly, daily, weekly, monthly, yearly, never
+            priority:         1.0                   # 1.0 is top priority (100%) compared to 0.5 which is less priority (50%)
