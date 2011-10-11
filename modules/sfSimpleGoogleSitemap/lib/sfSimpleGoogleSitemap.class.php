@@ -100,8 +100,7 @@ class sfSimpleGoogleSitemap {
       foreach ($models as $just_a_name => $a)
       {
         $model = $a['model'];
-        $module = $a['module'];
-        $action = $a['action'];
+        $route = $a['route'];
         $params_array = $a['params'];
         $date_field = (isset($a['date'])?$a['date']:null);
         $criteria_array = (isset($a['criteria'])?$a['criteria']:null);
@@ -131,13 +130,11 @@ class sfSimpleGoogleSitemap {
         {
           foreach ($objects as $obj)
           {
-            $p = array();
+            $params = array();
             foreach ($params_array as $name => $method)
             {
-              $p[] = $name.'='.$obj->$method();
+              $params[$name] = $obj->$method();
             }
-
-            $url = $module.'/'.$action.'?'.implode('&', $p);
 
             if ($date_field)
             {
@@ -149,7 +146,7 @@ class sfSimpleGoogleSitemap {
             }
 
             $gsg->addUrl(
-              sfContext::getInstance()->getController()->genUrl($url, true),
+              url_for($route, $params, true),
               false,
               $url_date,
               true,
